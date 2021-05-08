@@ -11,6 +11,7 @@ const cronJob = async () => {
   console.log('done ');
 };
 
+// this will the schedule the cronJob to run for every hour
 schedule('* * * *', async () => {
   await cronJob();
 });
