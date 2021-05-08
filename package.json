@@ -1,0 +1,23 @@
+{
+  "name": "cowin",
+  "version": "1.0.0",
+  "description": "telegram bot for cowin",
+  "main": "index.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "keywords": [
+    "cowin",
+    "telegramBot"
+  ],
+  "author": "krishna chaithanya",
+  "license": "ISC",
+  "dependencies": {
+    "@types/jest": "^26.0.23",
+    "axios": "^0.21.1",
+    "jest": "^26.6.3",
+    "ts-jest": "^26.5.6",
+    "typescript": "^4.2.4"
+  }
+}
