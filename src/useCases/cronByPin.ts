@@ -14,14 +14,16 @@ export const cronByPinUseCase = async (
     const todayDate = moment(date).format('DD-MM-YYYY');
     const cowinRes = await getByPin(pincode, apiEndpoints.byPin, todayDate);
     //response is sent only if the centers length is greater than zero
+    const returnValue: center[] = [];
     if (cowinRes.centers.length > 0) {
       cowinRes.centers.forEach((center) => {
         center.sessions.forEach((session) => {
-          if (session.available_capacity > 0) return center;
+          if (session.available_capacity > 0) returnValue.push(center);
         });
       });
     }
-    return null;
+    if (returnValue.length > 0) return returnValue[0];
+    else return null;
   } catch (error) {
     const message = 'by pin cron job faced and error' + error;
     throw new internalServerError(message);
