@@ -29,16 +29,3 @@ export const getByPin = async (
     throw new internalServerError(message);
   }
 };
-
-getByPin(
-  '500059',
-  'https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin',
-  '08-05-2021'
-)
-  .then((res) => {
-    console.log(res);
-  })
-  .catch((err) => {
-    console.log(err);
-    console.log(err.messages);
-  });
