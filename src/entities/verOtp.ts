@@ -22,6 +22,7 @@ export const verOtp = async (apiEndpoint: string, otp: string, doc:doc):Promise<
         doc.createdAt = new Date();
         await replaceDoc(doc);
     } catch (error) {
+        console.log(error);
         throw new badRequestError("verification otp cowin api failed");
     }
 }

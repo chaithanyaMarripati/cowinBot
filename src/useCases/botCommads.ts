@@ -2,7 +2,7 @@ import TelegramBot from 'node-telegram-bot-api';
 import { apiEndpoints } from '../config';
 import { genOtp, getPdf, verOtp } from "../entities";
 import { checkChatId } from '../entities/dbQueries';
-import { badRequestError,mapDoc} from "../helper";
+import { badRequestError,mapDoc, sendDoc} from "../helper";
 export const echoCommand = (msg: TelegramBot.Message, match: RegExpExecArray | null, bot: TelegramBot) => {
   const chatId = msg.chat.id;
   try {
@@ -56,10 +56,14 @@ export const verOTPCommand = async (msg: TelegramBot.Message, match: RegExpExecA
 export const getPdfCommand = async (msg:TelegramBot.Message,match:RegExpExecArray | null ,bot: TelegramBot) => {
   // this is for getting the first dose vaccine report
   const chatId = msg.chat.id;
+  console.log("this is the chat id", chatId);
   try {
-    const bufferPdf = await getPdf(chatId, apiEndpoints.getPdf);
+    const data = await getPdf(chatId, apiEndpoints.getPdf);
+    console.log("got the data buffer");
     bot.sendMessage(chatId, "sending the pdf document,please wait");
-    await bot.sendDocument(chatId, bufferPdf, {}, { filename: `${chatId}.pdf`, contentType: "application/pdf" });
+    console.log(data);
+    await sendDoc(chatId,data);
+    //await bot.sendDocument(chatId, data, {}, { filename: `${chatId}.pdf`, contentType: "application/pdf"});
   } catch (error) {
     bot.sendMessage(chatId, error.message || "get pdf cowin api failed");
   }
