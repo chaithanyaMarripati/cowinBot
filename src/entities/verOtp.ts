@@ -6,9 +6,6 @@ import { doc } from "../interface";
 import { replaceDoc } from "./dbQueries";
 export const verOtp = async (apiEndpoint: string, otp: string, doc:doc):Promise<void> => {
     try {
-        console.log("this is the otp for that");
-        console.log(otp);
-        console.log(createHash("sha256").update(otp).digest("hex"));
         const req = {
             url: apiEndpoint,
             method: "POST",
@@ -19,14 +16,12 @@ export const verOtp = async (apiEndpoint: string, otp: string, doc:doc):Promise<
             headers: headers
         
         } as AxiosRequestConfig;
-        console.log(req);
         const res = await axios(req);
-        console.log(res);
         const data = res.data;
         doc.token = data.token;
+        doc.createdAt = new Date();
         await replaceDoc(doc);
     } catch (error) {
-        console.log(error);
         throw new badRequestError("verification otp cowin api failed");
     }
 }

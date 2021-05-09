@@ -3,4 +3,5 @@ export interface doc {
     txnId: string;
     chatId: number;
     token?: string;
+    createdAt?: Date;
 }

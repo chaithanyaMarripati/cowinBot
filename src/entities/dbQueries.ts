@@ -14,7 +14,6 @@ export const checkChatId = async (chatId: number): Promise<any> => {
 }
 export const replaceDoc = async (doc:doc):Promise<void>=> {
     const client = await getClient();
-    console.log(doc);
     const collection = client.db(dbName).collection(dbCollection);
     await collection.findOneAndReplace({ chatId:doc.chatId}, doc);
 }

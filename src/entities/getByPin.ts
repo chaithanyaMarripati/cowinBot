@@ -22,7 +22,6 @@ export const getByPin = async (
     const cowinApiRes = mapByPinRes(apiResDate);
     return cowinApiRes;
   } catch (error) {
-    console.log(error);
     const message = 'get by pin cowin api faced an error' + error;
     throw new internalServerError(message);
   }

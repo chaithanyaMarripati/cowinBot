@@ -1,6 +1,6 @@
 import TelegramBot from 'node-telegram-bot-api';
 import { apiEndpoints } from '../config';
-import { genOtp, verOtp } from "../entities";
+import { genOtp, getPdf, verOtp } from "../entities";
 import { checkChatId } from '../entities/dbQueries';
 import { badRequestError,mapDoc} from "../helper";
 export const echoCommand = (msg: TelegramBot.Message, match: RegExpExecArray | null, bot: TelegramBot) => {
@@ -44,7 +44,6 @@ export const verOTPCommand = async (msg: TelegramBot.Message, match: RegExpExecA
     //if everything is success, we store the token in the db
     const record = await checkChatId(chatId);
     const doc = mapDoc(record);
-    console.log(record);
     if (!record || !doc.txnId)
       throw new badRequestError("otp may have expired, please authorize again");
     await verOtp(apiEndpoints.verOtp,otp,doc);
@@ -54,6 +53,14 @@ export const verOTPCommand = async (msg: TelegramBot.Message, match: RegExpExecA
   }
 }
 
-export const getDoc = async () => {
+export const getPdfCommand = async (msg:TelegramBot.Message,match:RegExpExecArray | null ,bot: TelegramBot) => {
   // this is for getting the first dose vaccine report
+  const chatId = msg.chat.id;
+  try {
+    const bufferPdf = await getPdf(chatId, apiEndpoints.getPdf);
+    bot.sendMessage(chatId, "sending the pdf document,please wait");
+    await bot.sendDocument(chatId, bufferPdf, {}, { filename: `${chatId}.pdf`, contentType: "application/pdf" });
+  } catch (error) {
+    bot.sendMessage(chatId, error.message || "get pdf cowin api failed");
+  }
 }
