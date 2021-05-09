@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig} from "axios"
+import { headers } from "../config";
 import { badRequestError } from "../helper";
-import { writeTxnIdToDb } from "./writeTxnId";
+import { writeTxnIdToDb } from "./dbQueries";
 export const genOtp = async (mobileNum: string, apiEndpoint: string, chatId:number): Promise<void> => {
     try {
         const req = {
@@ -8,7 +9,8 @@ export const genOtp = async (mobileNum: string, apiEndpoint: string, chatId:numb
             method: "POST",
             data: {
                 mobile: mobileNum
-            }
+            },
+            headers: headers
         } as AxiosRequestConfig;
         const res = await axios(req);
         const txnId = res.data.txnId;
