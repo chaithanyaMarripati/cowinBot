@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
+import { headers } from '../config';
 import { internalServerError, mapByPinRes } from '../helper';
 import { cowinApiResponse } from '../interface';
 export const getByPin = async (
@@ -14,10 +15,7 @@ export const getByPin = async (
         pincode: pin,
         date: date,
       },
-      headers: {
-        'User-Agent':
-          'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36',
-      },
+      headers: headers,
     } as AxiosRequestConfig;
     const res = await axios(axiosReq);
     const apiResDate = res.data;
