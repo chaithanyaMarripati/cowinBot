@@ -1,4 +1,6 @@
 import TelegramBot from 'node-telegram-bot-api';
+import { apiEndpoints } from '../config';
+import { genOtp } from "../entities";
 import { badRequestError } from "../helper";
 export const echoCommand = (msg: TelegramBot.Message, match: RegExpExecArray | null, bot: TelegramBot) => {
   const chatId = msg.chat.id;
@@ -12,7 +14,7 @@ export const echoCommand = (msg: TelegramBot.Message, match: RegExpExecArray | n
   }
   }
 
-export const genOTPCommand = (msg: TelegramBot.Message, match: RegExpExecArray | null, bot: TelegramBot) => {
+export const genOTPCommand = async (msg: TelegramBot.Message, match: RegExpExecArray | null, bot: TelegramBot) => {
   const chatId = msg.chat.id;
   try {
     if (!match) throw new Error("enter mobile number after / command");
@@ -22,10 +24,9 @@ export const genOTPCommand = (msg: TelegramBot.Message, match: RegExpExecArray |
     //now need to call the cowin api for this 
     //need to have a db with chat id as index 
     //and have txnid as prepouplated
-    console.log(mobileNum);
-    //call the conwin api 
+    await genOtp(mobileNum,apiEndpoints.getOtp,chatId);
     bot.sendMessage(chatId, "otp sent to you mobile number , use /verOTP <otp> to verify otp");
   } catch (error) {
-    bot.sendMessage(chatId, error.message);
+    bot.sendMessage(chatId, error.message || "genOTPCommand failed");
   }
 }

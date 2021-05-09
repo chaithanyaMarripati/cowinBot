@@ -9,6 +9,6 @@ const bot = new TelegramBot(botToken as string, { polling: true });
 bot.onText(/\/echo (.+)/, (msg, match) => {
     echoCommand(msg, match, bot);
 });
-bot.onText(/\/genOTP (.+)/, (msg, match) => {
-    genOTPCommand(msg, match, bot);
+bot.onText(/\/genOTP (.+)/, async (msg, match) => {
+    await genOTPCommand(msg, match, bot);
 })
