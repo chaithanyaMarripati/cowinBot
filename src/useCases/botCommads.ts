@@ -1,15 +1,8 @@
 import TelegramBot from 'node-telegram-bot-api';
-<<<<<<< HEAD
-import { apiEndpoints } from '../config';
-import { genOtp, getPdf, verOtp } from "../entities";
-import { checkChatId } from '../entities/dbQueries';
-import { badRequestError,mapDoc} from "../helper";
-=======
-import { apiEndpoints,collecitons} from '../config';
-import { genOtp, getPdf, verOtp,checkChatId, postDocToDb } from "../entities";
-import { badRequestError, mapDoc, sendDoc } from "../helper";
+import { apiEndpoints,collections} from '../config';
+import { genOtp, getPdf, verOtp,checkChatId, postDocToDb, deleteRecord } from "../entities";
+import { badRequestError, mapByCronDoc, mapDoc, sendDoc } from "../helper";
 import { pinCode } from "../interface";
->>>>>>> 7e699430cb87204502d7505b1f9842ca4a056b21
 export const echoCommand = (msg: TelegramBot.Message, match: RegExpExecArray | null, bot: TelegramBot) => {
   const chatId = msg.chat.id;
   try {
@@ -87,7 +80,7 @@ export const subscribeCommand = async (msg: TelegramBot.Message, match: RegExpEx
     // 3) send a message that pincode has been entered in db, if vaccine is available, chat will be updated
     
     //1) checking if the user has a pincode already present 
-    const present = await checkChatId(chatId, collecitons.cronJobCollection);
+    const present = await checkChatId(chatId, collections.cronJobCollection);
     if (present) {
       bot.sendMessage(chatId, "pinCode already present, use /delPin to delete the pin");
       return;
@@ -102,10 +95,30 @@ export const subscribeCommand = async (msg: TelegramBot.Message, match: RegExpEx
       chatId: chatId,
       pinCode:pinCode
     }
-    await postDocToDb(record, collecitons.cronJobCollection);
+    await postDocToDb(record, collections.cronJobCollection);
     bot.sendMessage(chatId, "pinCode saved successfully, you will be notified if vaccine becomes available");
   } catch (error) {
     console.log(error);
     bot.sendMessage(chatId, error.message || "subscribe command failed");
   }
 }
+
+export const deletePinCommand = async (msg: TelegramBot.Message, match: RegExpExecArray | null, bot: TelegramBot):Promise<void> => {
+  const chatId = msg.chat.id;
+  try {
+    //roadmap 
+    //1) check if the user has a pin already set 
+    //2) if yes delete the record else throw error saying that no pin is set 
+    const present = await checkChatId(chatId, collections.cronJobCollection);
+    if (!present) {
+      bot.sendMessage(chatId, "no pinCode present, please subscribe to a pin to recieve notifications");
+      return;
+    }
+    const document = mapByCronDoc(present);
+    await deleteRecord(document, collections.cronJobCollection);
+    bot.sendMessage(chatId, "pin unsubscribed, you will no longer recieve any events with this pin, use /subPin to subscribe for additonal pins");
+  } catch (error) {
+    console.log(error);
+    bot.sendMessage(chatId, error.message || "delete command failed");
+  }
+ }

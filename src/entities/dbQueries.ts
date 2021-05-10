@@ -23,3 +23,9 @@ export const postDocToDb = async (doc: any, givenCollection: string): Promise<vo
     const collection = client.db(dbName).collection(givenCollection);
     await collection.insertOne(doc);
 }
+
+export const deleteRecord = async (doc: any, givenCollection: string) => {
+    const client = await getClient();
+    const collection = client.db(dbName).collection(givenCollection);
+    await collection.deleteOne({ _id: doc._id });
+}
