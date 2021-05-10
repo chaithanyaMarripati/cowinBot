@@ -29,6 +29,7 @@ export const getPdf = async (chatId: number, apiEndpoint: string): Promise<Buffe
         }
     } as AxiosRequestConfig;
     const res = await axios(req);
-    const data = res.data;
-    return data;
+    //console.log(res)
+    const buff = Buffer.from(res.data);
+    return buff;
  }

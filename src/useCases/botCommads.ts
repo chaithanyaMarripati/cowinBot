@@ -1,8 +1,15 @@
 import TelegramBot from 'node-telegram-bot-api';
+<<<<<<< HEAD
 import { apiEndpoints } from '../config';
 import { genOtp, getPdf, verOtp } from "../entities";
 import { checkChatId } from '../entities/dbQueries';
 import { badRequestError,mapDoc} from "../helper";
+=======
+import { apiEndpoints,collecitons} from '../config';
+import { genOtp, getPdf, verOtp,checkChatId, postDocToDb } from "../entities";
+import { badRequestError, mapDoc, sendDoc } from "../helper";
+import { pinCode } from "../interface";
+>>>>>>> 7e699430cb87204502d7505b1f9842ca4a056b21
 export const echoCommand = (msg: TelegramBot.Message, match: RegExpExecArray | null, bot: TelegramBot) => {
   const chatId = msg.chat.id;
   try {
@@ -56,11 +63,49 @@ export const verOTPCommand = async (msg: TelegramBot.Message, match: RegExpExecA
 export const getPdfCommand = async (msg:TelegramBot.Message,match:RegExpExecArray | null ,bot: TelegramBot) => {
   // this is for getting the first dose vaccine report
   const chatId = msg.chat.id;
+  console.log("this is the chat id", chatId);
   try {
-    const bufferPdf = await getPdf(chatId, apiEndpoints.getPdf);
+    const data = await getPdf(chatId, apiEndpoints.getPdf);
+    console.log("got the data buffer");
     bot.sendMessage(chatId, "sending the pdf document,please wait");
-    await bot.sendDocument(chatId, bufferPdf, {}, { filename: `${chatId}.pdf`, contentType: "application/pdf" });
+    console.log(data);
+    await sendDoc(chatId,data);
+    //await bot.sendDocument(chatId, data, {}, { filename: `${chatId}.pdf`, contentType: "application/pdf"});
   } catch (error) {
     bot.sendMessage(chatId, error.message || "get pdf cowin api failed");
+  }
+}
+
+export const subscribeCommand = async (msg: TelegramBot.Message, match: RegExpExecArray | null, bot: TelegramBot): Promise<void> => {
+  const chatId = msg.chat.id;
+  console.log("subscribeCommand got hit");
+  try {
+    //road map 
+    // when a user wants to subscribe for the vaccine in his area
+    // 1) first check if the user has already subsribed ? throw error:add it to the db 
+    // 2) each user can have only one pincode he can search for 
+    // 3) send a message that pincode has been entered in db, if vaccine is available, chat will be updated
+    
+    //1) checking if the user has a pincode already present 
+    const present = await checkChatId(chatId, collecitons.cronJobCollection);
+    if (present) {
+      bot.sendMessage(chatId, "pinCode already present, use /delPin to delete the pin");
+      return;
+    }
+    if (!match || !match[1] || match[1].length!=6) {
+      bot.sendMessage(chatId, "enter valid 6 digit pincode");
+      return;
+    }
+    const pinCode = match[1];
+    //2) inserting the pin into the collection
+    const record: pinCode = {
+      chatId: chatId,
+      pinCode:pinCode
+    }
+    await postDocToDb(record, collecitons.cronJobCollection);
+    bot.sendMessage(chatId, "pinCode saved successfully, you will be notified if vaccine becomes available");
+  } catch (error) {
+    console.log(error);
+    bot.sendMessage(chatId, error.message || "subscribe command failed");
   }
 }
