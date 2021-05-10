@@ -15,3 +15,7 @@ export const headers = {
   'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36'
 }
 export const mongoUri = process.env.MONGO_URI;
+export const collecitons = {
+  userAuthCollection: "cowinCollection",
+  cronJobCollection:"cronCollection"
+}

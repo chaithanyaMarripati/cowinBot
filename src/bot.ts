@@ -3,7 +3,7 @@ dotenv.config();
 import { MongoClient } from "mongodb";
 import TelegramBot from 'node-telegram-bot-api';
 import { botToken, mongoUri } from './config';
-import {echoCommand,genOTPCommand,verOTPCommand,getPdfCommand} from "./useCases"
+import {echoCommand,genOTPCommand,verOTPCommand,getPdfCommand,subscribeCommand} from "./useCases"
 const bot = new TelegramBot(botToken as string, { polling: true });
 
 // this responds to the /echo "message" command , gives back the message;
@@ -16,7 +16,10 @@ bot.onText(/\/genOTP (.+)/, async (msg, match) => {
 bot.onText(/\/verOTP (.+)/, async (msg, match) => {
     await verOTPCommand(msg, match, bot);
 })
-bot.onText(/\/getPdf (.+)/, async (msg, match) => {
+bot.onText(/\/getPdf/, async (msg, match) => {
     await getPdfCommand(msg, match, bot);
+})
+bot.onText(/\/subPin (.+)/, async (msg, match) => {
+    await subscribeCommand(msg, match, bot);
 })
 export const client = new MongoClient(mongoUri as string, { useNewUrlParser: true, useUnifiedTopology: true });
