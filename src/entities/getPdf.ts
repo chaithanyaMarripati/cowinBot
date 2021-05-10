@@ -3,7 +3,6 @@ import { badRequestError, mapDoc } from "../helper";
 import { checkChatId } from "./dbQueries";
 import jwtDecode from "jwt-decode";
 import { headers } from "../config";
-import { } from "stream/promises";
 export const getPdf = async (chatId: number, apiEndpoint: string): Promise<Buffer> => {
     const record = await checkChatId(chatId);
     if (!record)
