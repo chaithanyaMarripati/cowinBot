@@ -1,7 +1,7 @@
 import TelegramBot from 'node-telegram-bot-api';
 import { apiEndpoints,collections} from '../config';
-import { genOtp, getPdf, verOtp,checkChatId, postDocToDb, deleteRecord } from "../entities";
-import { badRequestError, mapByCronDoc, mapDoc, sendDoc } from "../helper";
+import { genOtp,  verOtp,checkChatId, postDocToDb, deleteRecord, getPdf } from "../entities";
+import { badRequestError, mapByCronDoc, mapDoc } from "../helper";
 import { pinCode } from "../interface";
 export const echoCommand = (msg: TelegramBot.Message, match: RegExpExecArray | null, bot: TelegramBot) => {
   const chatId = msg.chat.id;
@@ -11,6 +11,7 @@ export const echoCommand = (msg: TelegramBot.Message, match: RegExpExecArray | n
     bot.sendMessage(chatId, resp);
   }
   catch (error) {
+    console.log(error);
     bot.sendMessage(chatId, error.message);
   }
   }
@@ -28,6 +29,7 @@ export const genOTPCommand = async (msg: TelegramBot.Message, match: RegExpExecA
     await genOtp(mobileNum,apiEndpoints.getOtp,chatId);
     bot.sendMessage(chatId, "otp sent to you mobile number , use /verOTP <otp> to verify otp");
   } catch (error) {
+    console.log(error);
     bot.sendMessage(chatId, error.message || "genOTPCommand failed");
   }
 }
@@ -49,6 +51,7 @@ export const verOTPCommand = async (msg: TelegramBot.Message, match: RegExpExecA
     await verOtp(apiEndpoints.verOtp,otp,doc);
     bot.sendMessage(chatId,"otp verified, use the other commands for next 5 mins ");
   } catch (error) {
+    console.log(error);
     bot.sendMessage(chatId, error.message || "verOTPCommand failed");
   }
 }
@@ -58,13 +61,13 @@ export const getPdfCommand = async (msg:TelegramBot.Message,match:RegExpExecArra
   const chatId = msg.chat.id;
   console.log("this is the chat id", chatId);
   try {
-    const data = await getPdf(chatId, apiEndpoints.getPdf);
-    console.log("got the data buffer");
-    bot.sendMessage(chatId, "sending the pdf document,please wait");
-    console.log(data);
-    await sendDoc(chatId,data);
+    const buffData= await getPdf(chatId, apiEndpoints.getPdf);
+    await bot.sendMessage(chatId, "sending the pdf document,please wait");
+    await bot.sendDocument(chatId, buffData);
+    //fs.unlinkSync(`${chatId}.pdf`);
     //await bot.sendDocument(chatId, data, {}, { filename: `${chatId}.pdf`, contentType: "application/pdf"});
   } catch (error) {
+    console.log(error);
     bot.sendMessage(chatId, error.message || "get pdf cowin api failed");
   }
 }

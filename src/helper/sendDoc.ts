@@ -1,25 +1,9 @@
-import request from "request-promise";
+import TelegramBot from "node-telegram-bot-api";
 import { badRequestError } from "./errors";
-export const sendDoc = async (chatId: number, doc: Buffer): Promise<void> => {
+
+export const sendDoc = async (chatId: number, doc: Buffer,bot:TelegramBot): Promise<void> => {
     try {
-        const api = `https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendDocument`;
-        const options = {
-            'method': 'POST',
-            'url': api,
-            'headers': {
-            },
-            formData: {
-                'chat_id': chatId,
-                'document': {
-                    'value': doc,
-                    'options': {
-                        'filename': `${chatId}.pdf`,
-                        'contentType': "application/pdf"
-                    }
-                }
-            }
-        };
-        await request(options);
+        await bot.sendDocument(chatId, doc, {});
     }
     catch (error) {
         console.log(error);
