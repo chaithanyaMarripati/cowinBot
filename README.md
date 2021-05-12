@@ -3,9 +3,9 @@
 ## commands implemented
 - [x] /genOTP
 - [x] /verOTP
-- [ ] /getPdf
-- [ ] /subPin
-- [ ] /delPin
+- [x] /getPdf
+- [x] /subPin
+- [x] /delPin
 
 
 **/genOTP**
