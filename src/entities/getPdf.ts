@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig} from "axios"
+import axios, { AxiosRequestConfig } from "axios"
 import { badRequestError, mapDoc } from "../helper";
 import { checkChatId } from "./dbQueries";
 import jwtDecode from "jwt-decode";
@@ -19,6 +19,7 @@ export const getPdf = async (chatId: number, apiEndpoint: string): Promise<Buffe
 
     const req = {
         url: apiEndpoint,
+        responseType:"arraybuffer",
         method: "GET",
         params: {
             beneficiary_reference_id :benficiaryId
@@ -29,7 +30,5 @@ export const getPdf = async (chatId: number, apiEndpoint: string): Promise<Buffe
         }
     } as AxiosRequestConfig;
     const res = await axios(req);
-    //console.log(res)
-    const buff = Buffer.from(res.data);
-    return buff;
- }
+    return res.data;
+}
