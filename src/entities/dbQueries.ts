@@ -1,10 +1,10 @@
 import { dbName,dbCollection,} from "../config";
 import { getClient } from "../helper/getClient";
 import { doc } from "../interface";
-export const writeTxnIdToDb = async (txnId: string, chatId: number):Promise<void> => {
+export const writeToDb = async (doc: any,givenCollection:string):Promise<void> => {
     const client = await getClient();
-    const collection = client.db(dbName).collection(dbCollection);
-    await collection.insertOne({ txnId: txnId, chatId: chatId, createdAt: new Date() });
+    const collection = client.db(dbName).collection(givenCollection);
+    await collection.insertOne(doc);
 }
 export const checkChatId = async (chatId: number,givenCollection?:string): Promise<any> => {
     const client = await getClient();

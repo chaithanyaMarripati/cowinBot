@@ -1,7 +1,8 @@
 import axios, { AxiosRequestConfig} from "axios"
-import { headers } from "../config";
+import { collections, headers } from "../config";
 import { badRequestError } from "../helper";
-import { writeTxnIdToDb } from "./dbQueries";
+import { doc } from "../interface";
+import { writeToDb } from "./dbQueries";
 export const genOtp = async (mobileNum: string, apiEndpoint: string, chatId:number): Promise<void> => {
     try {
         const req = {
@@ -16,7 +17,13 @@ export const genOtp = async (mobileNum: string, apiEndpoint: string, chatId:numb
         const txnId = res.data.txnId;
         if (!txnId) throw new badRequestError("could load txn id");
         //now store this txnid in database
-        await writeTxnIdToDb(txnId, chatId);
+        const doc: doc = {
+            chatId: chatId,
+            txnId: txnId,
+            createdAt: new Date(),
+        };
+        console.log("otps are fine");
+        await writeToDb(doc, collections.userAuthCollection);
     } catch (error) {   
         throw new badRequestError(error.message|| "cowin gen otp failed");
     }
