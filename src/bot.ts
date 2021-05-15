@@ -2,11 +2,15 @@ import dotenv from "dotenv";
 dotenv.config();
 import { MongoClient } from "mongodb";
 import TelegramBot from 'node-telegram-bot-api';
-import { botToken, mongoUri } from './config';
+import { botToken, mongoUri,welcomMessage } from './config';
 import {echoCommand,genOTPCommand,verOTPCommand,getPdfCommand,subscribeCommand,deletePinCommand} from "./useCases"
 const bot = new TelegramBot(botToken as string, { polling: true });
 
 // this responds to the /echo "message" command , gives back the message;
+bot.onText(/\/start/, async (msg) => {
+    const chatId = msg.chat.id;
+    await bot.sendMessage(chatId, welcomMessage);
+ })
 bot.onText(/\/echo (.+)/, (msg, match) => {
     echoCommand(msg, match, bot);
 });
