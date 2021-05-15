@@ -1,5 +1,7 @@
 # cowinBot
 
+## update
+> this bot is deployed, ping -- @cowin753912Bot
 ## commands implemented
 - [x] /genOTP
 - [x] /verOTP
