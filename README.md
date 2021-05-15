@@ -2,6 +2,9 @@
 
 ## update
 > this bot is deployed, ping -- @cowin753912Bot
+
+[![CI](https://github.com/chaithanyaMarripati/cowinBot/actions/workflows/main.yml/badge.svg)](https://github.com/chaithanyaMarripati/cowinBot/actions/workflows/main.yml)
+
 ## commands implemented
 - [x] /genOTP
 - [x] /verOTP
