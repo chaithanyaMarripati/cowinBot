@@ -3,7 +3,6 @@
 ## update
 > this bot is deployed, ping -- @cowin753912Bot
 
-[![CI](https://github.com/chaithanyaMarripati/cowinBot/actions/workflows/main.yml/badge.svg)](https://github.com/chaithanyaMarripati/cowinBot/actions/workflows/main.yml)
 ![Build Status](https://codebuild.us-east-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiNlMwWlQ3WGVQeEhtQ3pBbEs3MGN6MUdEeFBrek9zemNnZUx2QWFENk5hRS9ib0JZckd0VDZuL2k4M1lkVFJZNThQRFFYcXV2VlZYMkRZT1o3aWJDL1g4PSIsIml2UGFyYW1ldGVyU3BlYyI6IjJ5di9aNEdWNUl2STBldXYiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=main)
 ## commands implemented
 - [x] /genOTP
