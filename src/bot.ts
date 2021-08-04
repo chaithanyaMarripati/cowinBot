@@ -14,19 +14,19 @@ bot.onText(/\/start/, async (msg) => {
 bot.onText(/\/echo (.+)/, (msg, match) => {
     echoCommand(msg, match, bot);
 });
-bot.onText(/\/genOTP (.+)/, async (msg, match) => {
+bot.onText(/\/genotp (.+)/, async (msg, match) => {
     await genOTPCommand(msg, match, bot);
 })
-bot.onText(/\/verOTP (.+)/, async (msg, match) => {
+bot.onText(/\/verotp (.+)/, async (msg, match) => {
     await verOTPCommand(msg, match, bot);
 })
-bot.onText(/\/getPdf/, async (msg, match) => {
+bot.onText(/\/getpdf/, async (msg, match) => {
     await getPdfCommand(msg, match, bot);
 })
-bot.onText(/\/subPin (.+)/, async (msg, match) => {
+bot.onText(/\/subpin (.+)/, async (msg, match) => {
     await subscribeCommand(msg, match, bot);
 })
-bot.onText(/\/delPin/, async (msg, match) => {
+bot.onText(/\/delpin/, async (msg, match) => {
     await deletePinCommand(msg, match, bot);
 })
 export const client = new MongoClient(mongoUri as string, { useNewUrlParser: true, useUnifiedTopology: true });
