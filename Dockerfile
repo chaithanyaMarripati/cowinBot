@@ -1,3 +1,7 @@
-FROM alpine
-COPY quickstart.sh /
-CMD ["/quickstart.sh"]
+FROM node:13-slim
+
+WORKDIR /app
+
+ADD . /app
+
+CMD npm start
